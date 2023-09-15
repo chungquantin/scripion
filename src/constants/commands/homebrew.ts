@@ -1,0 +1,98 @@
+export const HOMEBREW_COMMANDS = [
+  {
+    command: 'brew',
+    args: 'install [package]',
+    name: 'Install a package',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'uninstall [package]',
+    name: 'Uninstall a package',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'search [term]',
+    name: 'Search for packages',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'info [package]',
+    name: 'Get package information',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'update',
+    name: 'Update package database',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'upgrade',
+    name: 'Upgrade all packages',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'outdated',
+    name: 'List outdated packages',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'upgrade [package]',
+    name: 'Upgrade a specific package',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'list [options]',
+    name: 'List installed packages',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'doctor',
+    name: 'Check for issues',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'cleanup',
+    name: 'Clean up old versions',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'tap [user/repo]',
+    name: 'Add an external repository',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'untap [user/repo]',
+    name: 'Remove an external repository',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'services [command]',
+    name: 'Manage services',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'link/unlink [package]',
+    name: 'Manage symlinks',
+    icon: 'homebrew.png',
+  },
+  {
+    command: 'brew',
+    args: 'edit [package]',
+    name: "Edit a package's formula",
+    icon: 'homebrew.png',
+  },
+];

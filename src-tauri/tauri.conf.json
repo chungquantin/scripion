@@ -12,15 +12,10 @@
   },
   "tauri": {
     "macOSPrivateApi": true,
-    "systemTray": {
-      "iconPath": "icons/icon.png",
-      "iconAsTemplate": true,
-      "menuOnLeftClick": false
-    },
     "allowlist": {
       "all": false,
       "shell": {
-        "all": false,
+        "all": true,
         "open": true
       }
     },
@@ -41,16 +36,17 @@
     },
     "windows": [
       {
-        "alwaysOnTop": true,
         "contentProtected": true,
-        "skipTaskbar": true,
         "fullscreen": false,
-        "height": 450,
+        "resizable": true,
         "title": "Script Manager",
-        "width": 400,
+        "minWidth": 1000,
+        "minHeight": 500,
+        "maxHeight": 2000,
+        "maxWidth": 1000,
         "visible": false,
         "hiddenTitle": false,
-        "decorations": false,
+        "decorations": true,
         "focus": false,
         "transparent": true
       }
