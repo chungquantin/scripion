@@ -1,37 +1,73 @@
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
-import "./App.css";
+import { useEffect, useState } from 'react';
+import { BsPlayFill } from 'react-icons/bs';
+import { FiCopy } from 'react-icons/fi';
+
+import { invoke } from '@tauri-apps/api';
+import { Avatar, Space, Tooltip } from 'antd';
+
+import AnimatedComponent from './components/AnimatedComponent';
+import { MIDDLE_STYLE } from './constants/style';
+import './index.scss';
+
+const MENU_ITEM_STYLE: React.CSSProperties = {
+  borderRadius: 10,
+};
+
+type ScriptItem = {
+  name: string;
+  command: string;
+  icon: string;
+};
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [scripts, setScripts] = useState<ScriptItem[]>([]);
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  const handleExecuteCommand = async (command: string) => {
+    await invoke('execute_command', { command });
+  };
+
+  useEffect(() => {
+    setScripts([
+      {
+        command: 'brew list',
+        name: 'List commands of Homebrew',
+        icon: 'homebrew.png',
+      },
+    ]);
+  }, []);
 
   return (
     <div>
-      <div className="container" style={{ maxHeight: 600, maxWidth: 600 }}>
-        <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-        <form
-          className="row"
-          onSubmit={(e) => {
-            e.preventDefault();
-            greet();
-          }}
-        >
-          <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
-          />
-          <button type="submit">Greet</button>
-        </form>
-
-        <p>{greetMsg}</p>
+      <div className="container" style={{ ...MENU_ITEM_STYLE }}>
+        <AnimatedComponent.OpacityFadeInDiv delay={300}>
+          <div>
+            <h4>Script Manager</h4>
+            {scripts.map(script => (
+              <Tooltip title={`$ ${script.command}`}>
+                <div
+                  onClick={() => handleExecuteCommand(script.command)}
+                  className="script-item"
+                  style={{
+                    ...MIDDLE_STYLE,
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    margin: '10px 0px',
+                  }}>
+                  <Space style={{ display: 'flex' }}>
+                    <Avatar src={script.icon} size={25} />
+                    <div>
+                      <div style={{ fontSize: 13 }}>{script.name}</div>
+                    </div>
+                  </Space>
+                  <Space>
+                    <BsPlayFill />
+                    <FiCopy />
+                  </Space>
+                </div>
+              </Tooltip>
+            ))}
+          </div>
+        </AnimatedComponent.OpacityFadeInDiv>
       </div>
     </div>
   );

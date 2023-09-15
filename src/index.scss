@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+$dark-theme-colors: (
+  'background_color': #2f2f2f,
+  'primary_color': #ffffff,
+  'dark_primary_color': #f1f1f1,
+  'dark_secondary_color': #d4dae1,
+  'secondary_color': rgb(61, 61, 61),
+  'sub_secondary_color': #0a96ff,
+  'highlight_color': #4e38f6,
+  'light_highlight_color': #7492ff,
+  'dark_highlight_color': #3f09a2,
+  'text_color': #f6f6f6,
+  'dark_text_color': rgb(135, 135, 135),
+  'text_color_contrast': white,
+  'dark_text_color_contrast': rgb(189, 189, 189),
+  'secondary_text_color': rgb(50, 29, 29),
+  'color_border': #404040,
+  'error_color': #e5534b,
+  'error_text_color': #e5534b,
+  'success_color': #2bb049,
+  'success_text_color': #2bb049,
+  'logo': #00c2ff,
+);
+
+$theme-colors: $dark-theme-colors;
+
+:export {
+  @each $key, $value in $theme-colors {
+    #{unquote($key)}: $value;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+.success-btn {
+  background-color: map-get($theme-colors, success_color);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  letter-spacing: -0.3px;
+  color: map-get($theme-colors, text_color);
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.container {
+  background-color: map-get($theme-colors, background_color);
+  border: 1px solid map-get($theme-colors, color_border);
+  padding: 20px 20px;
+}
+
+p {
+  margin: 0;
+}
+
+code {
+  color: map-get($theme-colors, dark_text_color);
+}
+
+.script-item {
+  padding: 3px 10px;
+  border-radius: 5px;
+  &:hover {
+    background-color: map-get($theme-colors, secondary_color);
+  }
+}
+
+.arrow {
+  position: relative;
+  padding: 12px 0;
+}
+
+.arrow:before {
+  content: '';
+  height: 0;
+  width: 0;
+  border-width: 0 8px 12px 8px;
+  border-style: solid;
+  border-color: transparent transparent #2f2f2f transparent;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    border-radius: 7px;
+    padding: 10px;
+    color: #f6f6f6;
+    background-color: #2f2f2f;
+  }
+}

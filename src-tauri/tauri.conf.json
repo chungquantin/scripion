@@ -7,8 +7,8 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "script-manager-app",
-    "version": "0.0.0"
+    "productName": "Script Hero",
+    "version": "0.0.1"
   },
   "tauri": {
     "macOSPrivateApi": true,
@@ -41,13 +41,15 @@
     },
     "windows": [
       {
+        "alwaysOnTop": true,
+        "contentProtected": true,
+        "skipTaskbar": true,
         "fullscreen": false,
-        "height": 600,
-        "resizable": false,
-        "title": "menubar",
-        "width": 600,
+        "height": 450,
+        "title": "Script Manager",
+        "width": 400,
         "visible": false,
-        "hiddenTitle": true,
+        "hiddenTitle": false,
         "decorations": false,
         "focus": false,
         "transparent": true

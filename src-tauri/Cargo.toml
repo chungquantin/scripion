@@ -13,9 +13,8 @@ edition = "2021"
 tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tauri = { version = "1.4", features = [
+tauri = { version = "1.4", features = [ "system-tray",
  "macos-private-api",
- "system-tray",
  "shell-open",
 ] }
 tauri-plugin-positioner = { version = "1.0.4", features = ["system-tray"] }
