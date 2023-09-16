@@ -16,9 +16,12 @@
     "prettier:check": "prettier --config .prettierrc.cjs '**/*.{js,jsx,ts,tsx}' --check"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@tauri-apps/api": "^1.4.0",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "antd": "^5.8.4",
+    "argv-split": "^2.0.1",
+    "bluebird": "^3.7.2",
     "date-fns": "^2.30.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
@@ -31,6 +34,7 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.4.0",
+    "@types/bluebird": "^3.5.39",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",

@@ -1,43 +1,42 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { BsPlayFill } from 'react-icons/bs';
-import { FiCopy } from 'react-icons/fi';
 
-import { invoke } from '@tauri-apps/api';
-import { Avatar, Layout, Space } from 'antd';
+// import { BsPlayFill } from 'react-icons/bs';
+// import { FiCopy } from 'react-icons/fi';
+import { Col, Layout, Row } from 'antd';
 
 import AnimatedComponent from './components/AnimatedComponent';
+import HistoryDirectoriesTab from './components/HistoryDirectoriesTab';
+import HistoryScriptsTab from './components/HistoryScriptsTab';
+import HistoryTabHeader from './components/HistoryTabHeader';
+import SystemScriptsTab from './components/SystemScriptsTab';
 import { STRIPE_BOX_SHADOW } from './constants';
-import { HOMEBREW_COMMANDS } from './constants/commands/homebrew';
 import { MIDDLE_STYLE } from './constants/style';
+import { useBackendInvoker } from './hooks';
 import './index.scss';
+import { useScriptManagerStore } from './stores';
 
-type ScriptItem = {
-  name: string;
-  args: string;
-  command: string;
-  icon: string;
-};
+enum TabItem {
+  Workspace,
+  History,
+  System,
+}
 
 function App() {
-  const [selectedScript, setSelectedScript] = useState<ScriptItem | undefined>(undefined);
-  const [scripts, setScripts] = useState<ScriptItem[]>([]);
-
-  const handleExecuteCommand = async (command: string) => {
-    const output = await invoke<string>('execute_command', { command });
-    console.log(output);
-  };
-
-  const handleSelectScriptItem = async (scriptItem: ScriptItem) => {
-    setSelectedScript(scriptItem);
-  };
+  const { homeDirectoryPath, setHomeDirectoryPath, shellDirectoryPath, setShellDirectoryPath } =
+    useScriptManagerStore();
+  const { handleExecuteCommand, handleGetShellPath } = useBackendInvoker();
+  const [selectedTab, setSelectedTab] = useState<TabItem>(TabItem.Workspace);
 
   useEffect(() => {
-    setScripts(HOMEBREW_COMMANDS);
+    const initHistory = async () => {
+      const homeDirectoryPath = await handleExecuteCommand('echo $HOME');
+      setHomeDirectoryPath(homeDirectoryPath);
+      const shellPath = await handleGetShellPath();
+      setShellDirectoryPath(shellPath);
+    };
+    initHistory();
   }, []);
-
-  useEffect(() => {
-    setSelectedScript(scripts.length > 0 ? scripts[0] : undefined);
-  }, [scripts]);
 
   return (
     <div style={{ overflow: 'hidden' }}>
@@ -47,54 +46,74 @@ function App() {
         <AnimatedComponent.OpacityFadeInDiv delay={300}>
           <Layout>
             <Layout.Sider width={325}>
+              <Row
+                className="tab-container"
+                gutter={25}
+                style={{
+                  ...MIDDLE_STYLE,
+                }}>
+                {[
+                  {
+                    key: TabItem.Workspace,
+                    name: 'Workspace',
+                  },
+                  {
+                    key: TabItem.History,
+                    name: 'History',
+                  },
+                  {
+                    key: TabItem.System,
+                    name: 'System',
+                  },
+                ].map(tab => (
+                  <Col
+                    onClick={() => setSelectedTab(tab.key)}
+                    key={tab.key}
+                    style={{ cursor: 'pointer' }}
+                    className={tab.key === selectedTab ? 'tab-item-selected' : 'tab-item'}
+                    span={8}>
+                    {tab.name}
+                  </Col>
+                ))}
+              </Row>
               <div
                 style={{
                   overflow: 'auto',
                   height: '100vh',
                   padding: '20px 10px',
                 }}>
-                {scripts.map(script => (
-                  <div className="border-bottom">
-                    <div
-                      onClick={() => handleSelectScriptItem(script)}
-                      className={`script-item ${
-                        `${selectedScript?.command}${selectedScript?.args}` ===
-                        `${script.command}${script.args}`
-                          ? 'script-item-selected'
-                          : ''
-                      }`}
-                      style={{
-                        ...MIDDLE_STYLE,
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        margin: '5px 0px',
-                      }}>
-                      <Space style={{ display: 'flex' }}>
-                        <Avatar src={script.icon} size={25} />
-                        <div>
-                          <div style={{ fontSize: 12 }}>{script.name}</div>
-                          <div
-                            style={{
-                              boxShadow: STRIPE_BOX_SHADOW,
-                              marginRight: 5,
-                              fontSize: 11,
-                              marginBottom: 5,
-                            }}
-                            className="command-item">
-                            {script.command} {script.args}
-                          </div>
-                        </div>
-                      </Space>
-                    </div>
-                  </div>
-                ))}
+                {selectedTab === TabItem.System && <SystemScriptsTab />}
+                {selectedTab === TabItem.History && <HistoryDirectoriesTab />}
               </div>
             </Layout.Sider>
             <Layout.Content>
-              <Space>
-                <BsPlayFill />
-                <FiCopy />
-              </Space>
+              <Layout.Header style={{ padding: 0, ...MIDDLE_STYLE }}>
+                {selectedTab === TabItem.History && <HistoryTabHeader />}
+              </Layout.Header>
+              <div style={{ overflow: 'auto', height: 'calc(100% - 90px)' }}>
+                {selectedTab === TabItem.History && <HistoryScriptsTab />}
+                <Row
+                  className="status-container"
+                  gutter={25}
+                  style={{
+                    ...MIDDLE_STYLE,
+                  }}>
+                  <Col
+                    className="status-item"
+                    span={12}
+                    style={{ ...MIDDLE_STYLE, justifyContent: 'space-between' }}>
+                    <h4>Home Path</h4>
+                    {homeDirectoryPath}
+                  </Col>
+                  <Col
+                    className="status-item"
+                    span={12}
+                    style={{ ...MIDDLE_STYLE, justifyContent: 'space-between' }}>
+                    <h4>Shell Path</h4>
+                    <p>{shellDirectoryPath}</p>
+                  </Col>
+                </Row>
+              </div>
             </Layout.Content>
           </Layout>
         </AnimatedComponent.OpacityFadeInDiv>

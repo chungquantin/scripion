@@ -1,5 +1,4 @@
-import CryptoJS from 'crypto-js';
-import slugify from 'slugify';
+export const breaklineCharacter = '\\n';
 
 export const shortenString = (str: string, maxLength: number) =>
   str?.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
@@ -23,14 +22,6 @@ export function makeid(length: number) {
   }
   return result;
 }
-
-export const buildSlug = (name: string, noNonce?: boolean) => {
-  return `${slugify(name as string, {
-    lower: true,
-    strict: true,
-    trim: true,
-  })}${!noNonce ? `-${makeid(5)}` : ''}`;
-};
 
 export function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return '0 Bytes';
@@ -125,17 +116,6 @@ export const getURLHost = (url: string) => {
   }
 };
 
-export function encryptData<T>(obj: T, secretPass: string) {
-  const data = CryptoJS.AES.encrypt(JSON.stringify(obj), secretPass).toString();
-  return data;
-}
-
-export function decryptData<T>(encryptedMessage: string, secretPass: string): T {
-  const bytes = CryptoJS.AES.decrypt(encryptedMessage, secretPass);
-  const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-  return data as T;
-}
-
 export const isValidEmail = (email: string) => {
   return String(email)
     .toLowerCase()
@@ -148,4 +128,12 @@ export const generateRandomRgbaStr = () => {
   return `rgba(${Math.floor(Math.random() * 150) + 0}, ${Math.floor(Math.random() * 150) + 0}, ${
     Math.floor(Math.random() * 150) + 0
   })`;
+};
+
+export const formatCommandOutput = (input: string) => {
+  return input.replaceAll(breaklineCharacter, '').replaceAll('"', '');
+};
+
+export const formatHistoryDirectoryName = (name: string) => {
+  return name.replace('.', '').replace('_history', '');
 };

@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 $dark-theme-colors: (
-  'background_color': #282828,
+  'background_color': #1d1d1d,
   'primary_color': #ffffff,
   'dark_primary_color': #f1f1f1,
   'dark_secondary_color': #484848,
-  'secondary_color': rgb(49, 49, 49),
-  'sub_secondary_color': #3f3f3f,
-  'highlight_color': #282828,
+  'secondary_color': rgb(35, 35, 35),
+  'sub_secondary_color': #313131,
+  'highlight_color': #c7781e,
   'light_highlight_color': #7492ff,
   'dark_highlight_color': #3f09a2,
   'text_color': #f6f6f6,
@@ -15,7 +15,7 @@ $dark-theme-colors: (
   'text_color_contrast': white,
   'dark_text_color_contrast': rgb(189, 189, 189),
   'secondary_text_color': rgb(50, 29, 29),
-  'color_border': #404040,
+  'color_border': rgb(46, 46, 46),
   'error_color': #e5534b,
   'error_text_color': #e5534b,
   'success_color': #2bb049,
@@ -182,8 +182,10 @@ code {
 }
 
 .ant-layout-header {
+  height: 43px;
   background-color: map_get($theme-colors, background_color);
   color: map_get($theme-colors, text_color);
+  border-bottom: 0.5px solid map_get($theme-colors, color_border);
 }
 
 .ant-layout-content {
@@ -279,7 +281,7 @@ code {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 10px;
 }
 
 /* Track */
@@ -296,4 +298,74 @@ code {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: map-get($theme-colors, highlight_color);
+}
+
+.status-container {
+  background-color: map-get($theme-colors, background_color);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 102%;
+  padding: 10px 20px;
+  border-top: 1px solid map-get($theme-colors, color_border);
+  .status-item {
+    border-left: 1px solid map-get($theme-colors, color_border);
+    color: map-get($theme-colors, dark_text_color);
+  }
+}
+
+.tab-container {
+  padding: 10px 25px;
+  border-bottom: 1px solid map-get($theme-colors, color_border);
+  .tab-item {
+    width: 100% !important;
+    text-align: center;
+    color: map-get($theme-colors, dark_text_color);
+  }
+  .tab-item-selected {
+    color: map-get($theme-colors, highlight_color);
+    font-weight: bold;
+  }
+}
+
+.history-directory-item {
+  font-weight: 500;
+  width: 100%;
+  padding: 3px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  &:hover {
+    &.history-directrory-item-selected {
+      background-color: map-get($theme-colors, sub_secondary_color);
+    }
+    background-color: map-get($theme-colors, sub_secondary_color);
+  }
+}
+
+.history-directory-item-selected {
+  color: map-get($theme-colors, highlight_color);
+  font-weight: 500;
+  width: 100%;
+  padding: 3px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.history-directory-sub {
+  color: map-get($theme-colors, dark_text_color);
+  font-size: 11px;
+  margin-left: 20;
+}
+
+.history-command-list-item {
+  border-bottom: 1px solid map-get($theme-colors, color_border);
+  .history-command-list-item-date {
+    color: map-get($theme-colors, dark_text_color);
+    font-size: 11px;
+  }
+  .history-command-list-item-index {
+    color: map-get($theme-colors, dark_text_color);
+    font-size: 11px;
+  }
 }

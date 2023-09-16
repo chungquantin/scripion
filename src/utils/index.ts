@@ -5,3 +5,5 @@ export * from './modal.util';
 export * from './drawer.util';
 export * from './date.util';
 export * from './number.util';
+export * from './history.util';
+export * from './object.util';
