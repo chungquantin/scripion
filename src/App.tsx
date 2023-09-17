@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
+import { FolderOpenOutlined } from '@ant-design/icons';
 // import { BsPlayFill } from 'react-icons/bs';
 // import { FiCopy } from 'react-icons/fi';
 import { Col, Layout, Row } from 'antd';
@@ -10,6 +11,7 @@ import HistoryDirectoriesTab from './components/HistoryDirectoriesTab';
 import HistoryScriptsTab from './components/HistoryScriptsTab';
 import HistoryTabHeader from './components/HistoryTabHeader';
 import SystemScriptsTab from './components/SystemScriptsTab';
+import WorkspaceContainer from './components/WorkspaceContainer';
 import { STRIPE_BOX_SHADOW } from './constants';
 import { MIDDLE_STYLE } from './constants/style';
 import { useBackendInvoker } from './hooks';
@@ -25,7 +27,7 @@ enum TabItem {
 function App() {
   const { homeDirectoryPath, setHomeDirectoryPath, shellDirectoryPath, setShellDirectoryPath } =
     useScriptManagerStore();
-  const { handleExecuteCommand, handleGetShellPath } = useBackendInvoker();
+  const { handleExecuteCommand, handleGetShellPath, handleOpenFolder } = useBackendInvoker();
   const [selectedTab, setSelectedTab] = useState<TabItem>(TabItem.Workspace);
 
   useEffect(() => {
@@ -45,7 +47,7 @@ function App() {
         style={{ boxShadow: STRIPE_BOX_SHADOW, height: '100vh', width: '100vw' }}>
         <AnimatedComponent.OpacityFadeInDiv delay={300}>
           <Layout>
-            <Layout.Sider width={325}>
+            <Layout.Sider width={280} style={{ height: 'calc(100% - 85px)' }}>
               <Row
                 className="tab-container"
                 gutter={25}
@@ -86,35 +88,50 @@ function App() {
                 {selectedTab === TabItem.History && <HistoryDirectoriesTab />}
               </div>
             </Layout.Sider>
-            <Layout.Content>
+            <Layout.Content style={{ position: 'relative' }}>
               <Layout.Header style={{ padding: 0, ...MIDDLE_STYLE }}>
                 {selectedTab === TabItem.History && <HistoryTabHeader />}
               </Layout.Header>
-              <div style={{ overflow: 'auto', height: 'calc(100% - 90px)' }}>
+              <div style={{ overflow: 'auto', height: 'calc(100% - 85px)' }}>
+                {selectedTab === TabItem.Workspace && <WorkspaceContainer />}
                 {selectedTab === TabItem.History && <HistoryScriptsTab />}
-                <Row
-                  className="status-container"
-                  gutter={25}
-                  style={{
-                    ...MIDDLE_STYLE,
-                  }}>
-                  <Col
-                    className="status-item"
-                    span={12}
-                    style={{ ...MIDDLE_STYLE, justifyContent: 'space-between' }}>
-                    <h4>Home Path</h4>
-                    {homeDirectoryPath}
-                  </Col>
-                  <Col
-                    className="status-item"
-                    span={12}
-                    style={{ ...MIDDLE_STYLE, justifyContent: 'space-between' }}>
-                    <h4>Shell Path</h4>
-                    <p>{shellDirectoryPath}</p>
-                  </Col>
-                </Row>
               </div>
             </Layout.Content>
+            <Row
+              className="status-container"
+              gutter={25}
+              style={{
+                ...MIDDLE_STYLE,
+              }}>
+              <Col
+                className="status-item"
+                span={12}
+                style={{ ...MIDDLE_STYLE, justifyContent: 'space-between' }}>
+                <h4>Home Path</h4>
+                <p style={{ ...MIDDLE_STYLE }}>
+                  {homeDirectoryPath}{' '}
+                  <div
+                    style={{ cursor: 'pointer', fontSize: 12, marginLeft: 15 }}
+                    onClick={() => handleOpenFolder(`${homeDirectoryPath}`)}>
+                    <FolderOpenOutlined />
+                  </div>
+                </p>
+              </Col>
+              <Col
+                className="status-item"
+                span={12}
+                style={{ ...MIDDLE_STYLE, justifyContent: 'space-between' }}>
+                <h4>Shell Path</h4>
+                <p style={{ ...MIDDLE_STYLE }}>
+                  {shellDirectoryPath}{' '}
+                  <div
+                    style={{ cursor: 'pointer', fontSize: 12, marginLeft: 15 }}
+                    onClick={() => handleOpenFolder(`${shellDirectoryPath}`)}>
+                    <FolderOpenOutlined />
+                  </div>
+                </p>
+              </Col>
+            </Row>
           </Layout>
         </AnimatedComponent.OpacityFadeInDiv>
       </div>

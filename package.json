@@ -23,6 +23,7 @@
     "argv-split": "^2.0.1",
     "bluebird": "^3.7.2",
     "date-fns": "^2.30.0",
+    "fuse.js": "^6.6.2",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

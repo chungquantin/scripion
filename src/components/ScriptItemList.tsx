@@ -14,9 +14,7 @@ const ScriptItemList = ({ scripts, selectedScript, handleSelectScriptItem }: Pro
         <div className="border-bottom">
           <ScriptItemListItem
             script={script}
-            isSelected={
-              `${selectedScript?.name}${selectedScript?.args}` === `${script.name}${script.args}`
-            }
+            isSelected={`${selectedScript?.command}` === `${script.command}`}
             onClick={() => handleSelectScriptItem(script)}
           />
         </div>

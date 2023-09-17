@@ -6,10 +6,10 @@ export interface ScriptManagerStoreState {
   selectedHistoryDirectory: string | undefined;
   homeDirectoryPath: string;
   shellDirectoryPath: string;
-  workspaceScrips: ScriptItem[];
+  workspaces: Record<string, ScriptItem[]>;
   historyRecords: Record<string, HistoryCommandItem[]>;
   systemScritps: ScriptItem[];
-  setWorkspaceScripts: (scripts: ScriptItem[]) => void;
+  setWorkspaces: (scripts: ScriptItem[]) => void;
   setHistoryRecords: (historyRecords: Record<string, HistoryCommandItem[]>) => void;
   setSelectedHistoryDirectory: (directoryName: string | undefined) => void;
   setSystemScripts: (scripts: ScriptItem[]) => void;
@@ -23,14 +23,14 @@ export const useScriptManagerStore = create<ScriptManagerStoreState>()(set => ({
   shellDirectoryPath: '',
   historyRecords: {},
   systemScritps: [],
-  workspaceScrips: [],
+  workspaces: {},
   setSelectedHistoryDirectory(directoryName) {
     set(state => ({
       ...state,
       selectedHistoryDirectory: directoryName,
     }));
   },
-  setWorkspaceScripts(scripts: ScriptItem[]) {
+  setWorkspaces(scripts: ScriptItem[]) {
     set(state => ({
       ...state,
       scripts,

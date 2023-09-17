@@ -1,6 +1,5 @@
 export type ScriptItem = {
   name: string;
-  args: string;
   command: string;
   icon: string;
 };

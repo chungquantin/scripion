@@ -14,6 +14,12 @@
     "macOSPrivateApi": true,
     "allowlist": {
       "all": false,
+      "dialog": {
+        "all": true
+      },
+      "path": {
+        "all": true
+      },
       "shell": {
         "all": true,
         "open": true
@@ -39,11 +45,10 @@
         "contentProtected": true,
         "fullscreen": false,
         "resizable": true,
-        "title": "Script Manager",
+        "title": "Scripion made by @nomadiz ❤️",
         "minWidth": 1000,
         "minHeight": 500,
         "maxHeight": 2000,
-        "maxWidth": 1000,
         "visible": false,
         "hiddenTitle": false,
         "decorations": true,

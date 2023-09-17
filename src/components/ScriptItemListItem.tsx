@@ -33,7 +33,7 @@ const ScriptItemListItem = ({ script, isSelected, onClick }: Props) => {
               marginBottom: 5,
             }}
             className="command-item">
-            {script.command} {script.args}
+            {script.command}
           </div>
         </div>
       </Space>

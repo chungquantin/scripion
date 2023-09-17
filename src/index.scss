@@ -80,6 +80,10 @@ code {
   border-bottom: 1px solid map-get($theme-colors, color_border);
 }
 
+.border-right {
+  border-right: 1px solid map-get($theme-colors, color_border);
+}
+
 .script-item {
   padding: 3px 10px;
   border-radius: 5px;
@@ -358,7 +362,12 @@ code {
   margin-left: 20;
 }
 
+.history-command-list-item-selected {
+  background-color: map-get($theme-colors, sub_secondary_color);
+}
+
 .history-command-list-item {
+  padding: 5px 20px;
   border-bottom: 1px solid map-get($theme-colors, color_border);
   .history-command-list-item-date {
     color: map-get($theme-colors, dark_text_color);
@@ -367,5 +376,49 @@ code {
   .history-command-list-item-index {
     color: map-get($theme-colors, dark_text_color);
     font-size: 11px;
+  }
+  &:hover {
+    &.history-command-item-selected {
+      background-color: map-get($theme-colors, sub_secondary_color);
+    }
+    background-color: map-get($theme-colors, sub_secondary_color);
+  }
+}
+
+.terminal-header {
+  background-color: black;
+}
+
+.terminal {
+  background-color: black;
+  height: 100%;
+}
+
+.ant-input-affix-wrapper {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+
+.ant-input {
+  background-color: transparent;
+  color: white;
+  border: none;
+  &::placeholder {
+    color: map-get($theme-colors, dark_text_color);
+    opacity: 1; /* Firefox */
+  }
+}
+
+.search-section {
+  background-color: map-get($theme-colors, background_color);
+}
+
+.table-header {
+  color: map-get($theme-colors, dark_text_color);
+  margin-bottom: 5px;
+  p {
+    font-size: smaller;
+    cursor: pointer;
   }
 }
