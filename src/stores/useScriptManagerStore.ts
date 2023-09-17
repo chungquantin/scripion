@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import { HistoryCommandItem, ScriptItem } from '../models';
 
-export type Workspace = { path: string; scripts: ScriptItem[]; name: string };
+export type Workspace = { id: string; path: string; scripts: ScriptItem[]; name: string };
 
 export interface ScriptManagerStoreState {
   selectedHistoryDirectory: string | undefined;
@@ -12,6 +12,7 @@ export interface ScriptManagerStoreState {
   workspaces: Record<string, Workspace>;
   historyRecords: Record<string, HistoryCommandItem[]>;
   systemScritps: ScriptItem[];
+  setWorkspaces: (workspaces: Record<string, Workspace>) => void;
   addWorkspace: (
     workspaceId: string,
     workspaceName: string,
@@ -35,6 +36,12 @@ export const useScriptManagerStore = create<ScriptManagerStoreState>()(set => ({
   historyRecords: {},
   systemScritps: [],
   workspaces: {},
+  setWorkspaces(workspaces: Record<string, Workspace>) {
+    set(state => ({
+      ...state,
+      workspaces,
+    }));
+  },
   removeWorkspace(workspaceId: string) {
     set(state => {
       delete state.workspaces[workspaceId];
@@ -59,6 +66,7 @@ export const useScriptManagerStore = create<ScriptManagerStoreState>()(set => ({
       workspaces: {
         ...state.workspaces,
         [workspaceId]: {
+          id: workspaceId,
           name: workspaceName,
           path,
           scripts,

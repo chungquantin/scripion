@@ -18,7 +18,7 @@ import { STRIPE_BOX_SHADOW } from './constants';
 import { MIDDLE_STYLE } from './constants/style';
 import { useBackendInvoker } from './hooks';
 import './index.scss';
-import { useScriptManagerStore } from './stores';
+import { Workspace, useScriptManagerStore } from './stores';
 
 enum TabItem {
   Workspace,
@@ -27,9 +27,15 @@ enum TabItem {
 }
 
 function App() {
-  const { homeDirectoryPath, setHomeDirectoryPath, shellDirectoryPath, setShellDirectoryPath } =
-    useScriptManagerStore();
-  const { handleExecuteCommand, handleGetShellPath, handleOpenFolder } = useBackendInvoker();
+  const {
+    homeDirectoryPath,
+    setHomeDirectoryPath,
+    shellDirectoryPath,
+    setShellDirectoryPath,
+    setWorkspaces,
+  } = useScriptManagerStore();
+  const { handleExecuteCommand, handleGetShellPath, handleOpenFolder, handleGetAllWorkspaces } =
+    useBackendInvoker();
   const [selectedTab, setSelectedTab] = useState<TabItem>(TabItem.Workspace);
 
   useEffect(() => {
@@ -40,6 +46,18 @@ function App() {
       setShellDirectoryPath(shellPath);
     };
     initHistory();
+  }, []);
+
+  useEffect(() => {
+    const init = async () => {
+      const workspaceList = await handleGetAllWorkspaces();
+      const workspaces: Record<string, Workspace> = {};
+      for (const workspaceListItem of workspaceList) {
+        workspaces[workspaceListItem.id.toString()] = workspaceListItem;
+      }
+      setWorkspaces(workspaces);
+    };
+    init();
   }, []);
 
   return (

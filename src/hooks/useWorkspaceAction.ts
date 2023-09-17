@@ -4,11 +4,12 @@ import { appConfigDir } from '@tauri-apps/api/path';
 import { useBackendInvoker } from '.';
 import { ScriptItem } from '../models';
 import { useScriptManagerStore, useSnackbarStore } from '../stores';
-import { iterateObject, makeid } from '../utils';
+import { makeid } from '../utils';
 
 export const useWorkspaceAction = () => {
   const { enqueueNotification } = useSnackbarStore();
-  const { handleExecuteCommand } = useBackendInvoker();
+  const { handleExecuteCommand, handleAddWorkspace, handleFindWorkspaceScripts } =
+    useBackendInvoker();
   const { addWorkspace, selectWorkspace } = useScriptManagerStore();
 
   const handleImportWorkspace = async () => {
@@ -27,14 +28,8 @@ export const useWorkspaceAction = () => {
 
         const workspaceName = jsonData['name'] || selected;
         selectWorkspace(workspaceName);
-        const scriptItems: ScriptItem[] = [];
-        iterateObject(jsonData['scripts'], (key, value: string) =>
-          scriptItems.push({
-            command: value,
-            icon: '',
-            name: key,
-          })
-        );
+        const scriptItems: ScriptItem[] = await handleFindWorkspaceScripts(selected);
+        handleAddWorkspace(workspaceName, selected);
         addWorkspace(makeid(5), workspaceName, selected, scriptItems);
       } else {
         throw new Error('Invalid file format');
@@ -48,12 +43,8 @@ export const useWorkspaceAction = () => {
     }
   };
 
-  const handleCreateNewWorkspace = () => {
-    // Add new workspace
-  };
-
   return {
     handleImportWorkspace,
-    handleCreateNewWorkspace,
+    handleFindWorkspaceScripts,
   };
 };

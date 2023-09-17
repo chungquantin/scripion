@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS Workspaces (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    path TEXT NOT NULL
+);

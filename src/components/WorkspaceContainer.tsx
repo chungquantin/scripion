@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 import React, { useMemo, useState } from 'react';
 
-import { DeleteOutlined, PlusOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, Space } from 'antd';
 import Fuse from 'fuse.js';
 
@@ -16,7 +16,7 @@ import ScriptItemList from './ScriptItemList';
 const options = { keys: ['name'] };
 
 const WorkspaceContainer = () => {
-  const { handleCreateNewWorkspace, handleImportWorkspace } = useWorkspaceAction();
+  const { handleImportWorkspace } = useWorkspaceAction();
   const { handleOpenTerminalAndExecuteCommand } = useBackendInvoker();
   const [searchInput, setSearchInput] = useState<string>('');
   const { workspaces, selectedWorkspace, removeWorkspace } = useScriptManagerStore();
@@ -99,15 +99,6 @@ const WorkspaceContainer = () => {
                 flexDirection: 'column',
               }}>
               <div>No workspace found</div>
-              <Button
-                onClick={handleCreateNewWorkspace}
-                style={{
-                  backgroundColor: 'transparent',
-                  color: 'white',
-                  ...MIDDLE_STYLE,
-                }}>
-                <PlusOutlined style={{ marginRight: 10 }} /> Create new workspace
-              </Button>
               <Button
                 onClick={handleImportWorkspace}
                 style={{
