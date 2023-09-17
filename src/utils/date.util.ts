@@ -19,7 +19,7 @@ export const getStartOfTodayUnix = () => {
   return getStartOfDayUnix(new Date());
 };
 
-export const getEndOfTodayUnix = (date: Date) => {
+export const getEndOfTodayUnix = () => {
   return getEndOfDayUnix(new Date());
 };
 
