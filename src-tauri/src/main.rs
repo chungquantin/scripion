@@ -58,25 +58,36 @@ fn get_relative_path(path: &str) -> PathBuf {
     let full_path = relative_path.to_path(current_dir().unwrap());
     full_path
 }
+
+fn get_database_conn() -> Connection {
+    let conn = Connection::open(DATABASE_PATH).unwrap();
+    return conn;
+}
+
 #[tauri::command]
 fn get_all_workspaces() -> Vec<Workspace> {
-    let conn = Connection::open(DATABASE_PATH).unwrap();
     let database_path = get_relative_path("sql/select-all-workspaces.sql");
     let mut workspaces: Vec<Workspace> = vec![];
     match read_to_string(database_path) {
         Ok(content) => {
-            let mut stmt = conn.prepare(&content).unwrap();
-            let rows = stmt
-                .query_map((), |row| {
-                    Ok(Workspace {
-                        id: row.get(0)?,
-                        name: row.get(1)?,
-                        path: row.get(2)?,
-                    })
-                })
-                .unwrap();
-            for row in rows {
-                workspaces.push(row.unwrap())
+            let conn = get_database_conn();
+            let stmt_check = conn.prepare(&content);
+            match stmt_check {
+                Ok(mut stmt) => {
+                    let rows = stmt
+                        .query_map((), |row| {
+                            Ok(Workspace {
+                                id: row.get(0)?,
+                                name: row.get(1)?,
+                                path: row.get(2)?,
+                            })
+                        })
+                        .unwrap();
+                    for row in rows {
+                        workspaces.push(row.unwrap())
+                    }
+                }
+                Err(err) => println!("{:?}", err),
             }
         }
         Err(_) => {
@@ -88,11 +99,12 @@ fn get_all_workspaces() -> Vec<Workspace> {
 
 #[tauri::command]
 fn add_workspace(name: &str, path: &str) -> Result<String, String> {
-    let conn = Connection::open(DATABASE_PATH).unwrap();
     let database_path = get_relative_path("sql/add-workspace.sql");
     match read_to_string(database_path) {
         Ok(content) => {
-            conn.execute(&content, &[name, path]).unwrap();
+            get_database_conn()
+                .execute(&content, &[name, path])
+                .unwrap();
         }
         Err(_) => println!("Failed to initialize database"),
     }
@@ -101,7 +113,7 @@ fn add_workspace(name: &str, path: &str) -> Result<String, String> {
 }
 
 fn initialize_database() {
-    let conn = Connection::open(DATABASE_PATH).unwrap();
+    let conn = get_database_conn();
     let database_path = get_relative_path("sql/create-workspace-table.sql");
     print!("Database path {:?}", database_path);
     match read_to_string(database_path) {
