@@ -12,6 +12,8 @@ import HistoryScriptsTab from './components/HistoryScriptsTab';
 import HistoryTabHeader from './components/HistoryTabHeader';
 import SystemScriptsTab from './components/SystemScriptsTab';
 import WorkspaceContainer from './components/WorkspaceContainer';
+import WorkspaceHeader from './components/WorkspaceHeader';
+import WorkspaceListTab from './components/WorkspaceListTab';
 import { STRIPE_BOX_SHADOW } from './constants';
 import { MIDDLE_STYLE } from './constants/style';
 import { useBackendInvoker } from './hooks';
@@ -84,6 +86,7 @@ function App() {
                   height: '100vh',
                   padding: '20px 10px',
                 }}>
+                {selectedTab === TabItem.Workspace && <WorkspaceListTab />}
                 {selectedTab === TabItem.System && <SystemScriptsTab />}
                 {selectedTab === TabItem.History && <HistoryDirectoriesTab />}
               </div>
@@ -91,6 +94,7 @@ function App() {
             <Layout.Content style={{ position: 'relative' }}>
               <Layout.Header style={{ padding: 0, ...MIDDLE_STYLE }}>
                 {selectedTab === TabItem.History && <HistoryTabHeader />}
+                {selectedTab === TabItem.Workspace && <WorkspaceHeader />}
               </Layout.Header>
               <div style={{ overflow: 'auto', height: 'calc(100% - 85px)' }}>
                 {selectedTab === TabItem.Workspace && <WorkspaceContainer />}

@@ -2,14 +2,24 @@ import { create } from 'zustand';
 
 import { HistoryCommandItem, ScriptItem } from '../models';
 
+export type Workspace = { path: string; scripts: ScriptItem[]; name: string };
+
 export interface ScriptManagerStoreState {
   selectedHistoryDirectory: string | undefined;
+  selectedWorkspace: string | undefined;
   homeDirectoryPath: string;
   shellDirectoryPath: string;
-  workspaces: Record<string, ScriptItem[]>;
+  workspaces: Record<string, Workspace>;
   historyRecords: Record<string, HistoryCommandItem[]>;
   systemScritps: ScriptItem[];
-  setWorkspaces: (scripts: ScriptItem[]) => void;
+  addWorkspace: (
+    workspaceId: string,
+    workspaceName: string,
+    path: string,
+    scripts: ScriptItem[]
+  ) => void;
+  removeWorkspace: (workspaceId: string) => void;
+  selectWorkspace: (workspaceName: string | undefined) => void;
   setHistoryRecords: (historyRecords: Record<string, HistoryCommandItem[]>) => void;
   setSelectedHistoryDirectory: (directoryName: string | undefined) => void;
   setSystemScripts: (scripts: ScriptItem[]) => void;
@@ -19,21 +29,41 @@ export interface ScriptManagerStoreState {
 
 export const useScriptManagerStore = create<ScriptManagerStoreState>()(set => ({
   selectedHistoryDirectory: undefined,
+  selectedWorkspace: undefined,
   homeDirectoryPath: '',
   shellDirectoryPath: '',
   historyRecords: {},
   systemScritps: [],
   workspaces: {},
+  removeWorkspace(workspaceId: string) {
+    set(state => {
+      delete state.workspaces[workspaceId];
+      return state;
+    });
+  },
+  selectWorkspace(workspaceName: string | undefined) {
+    set(state => ({
+      ...state,
+      selectedWorkspace: workspaceName,
+    }));
+  },
   setSelectedHistoryDirectory(directoryName) {
     set(state => ({
       ...state,
       selectedHistoryDirectory: directoryName,
     }));
   },
-  setWorkspaces(scripts: ScriptItem[]) {
+  addWorkspace(workspaceId: string, workspaceName: string, path: string, scripts: ScriptItem[]) {
     set(state => ({
       ...state,
-      scripts,
+      workspaces: {
+        ...state.workspaces,
+        [workspaceId]: {
+          name: workspaceName,
+          path,
+          scripts,
+        },
+      },
     }));
   },
   setSystemScripts: (scripts: ScriptItem[]) => {

@@ -1,28 +1,29 @@
-import { Avatar, Space } from 'antd';
+import { BsPlayFill } from 'react-icons/bs';
+
+import { Space, Tooltip } from 'antd';
 
 import { STRIPE_BOX_SHADOW } from '../constants';
 import { MIDDLE_STYLE } from '../constants/style';
 import { ScriptItem } from '../models';
 
 type Props = {
-  isSelected?: boolean;
   onClick?: any;
   script: ScriptItem;
 };
 
-const ScriptItemListItem = ({ script, isSelected, onClick }: Props) => {
+const ScriptItemListItem = ({ script, onClick }: Props) => {
   return (
     <div
-      onClick={onClick}
-      className={`script-item ${isSelected ? 'script-item-selected' : ''}`}
+      className={`script-item`}
       style={{
         ...MIDDLE_STYLE,
         justifyContent: 'space-between',
         cursor: 'pointer',
-        margin: '5px 0px',
+        width: '100%',
+        position: 'relative',
       }}>
-      <Space style={{ display: 'flex' }}>
-        <Avatar src={script.icon} size={25} />
+      <Space style={{ display: 'flex', width: '100%' }}>
+        {/* <Avatar src={script.icon} size={25} /> */}
         <div>
           <div style={{ fontSize: 12 }}>{script.name}</div>
           <div
@@ -37,6 +38,9 @@ const ScriptItemListItem = ({ script, isSelected, onClick }: Props) => {
           </div>
         </div>
       </Space>
+      <Tooltip title={'Execute command'}>
+        <BsPlayFill onClick={onClick} />
+      </Tooltip>
     </div>
   );
 };

@@ -85,16 +85,11 @@ code {
 }
 
 .script-item {
-  padding: 3px 10px;
+  width: 100%;
+  padding: 5px 25px;
   border-radius: 5px;
-  &.script-item-selected {
-    background-color: map-get($theme-colors, sub_secondary_color);
-  }
   &:hover {
-    &.script-item-selected {
-      background-color: map-get($theme-colors, sub_secondary_color);
-    }
-    background-color: map-get($theme-colors, secondary_color);
+    background-color: map-get($theme-colors, sub_secondary_color);
   }
 }
 
@@ -420,5 +415,12 @@ code {
   p {
     font-size: smaller;
     cursor: pointer;
+  }
+}
+
+.sider-button {
+  cursor: pointer;
+  &:hover {
+    color: map-get($theme-colors, highlight_color);
   }
 }

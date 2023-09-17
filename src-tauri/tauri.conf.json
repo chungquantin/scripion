@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "Script Hero",
+    "productName": "Scripion",
     "version": "0.0.1"
   },
   "tauri": {

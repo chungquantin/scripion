@@ -12,6 +12,7 @@ import { useBackendInvoker } from '../hooks';
 import { HistoryCommandItem } from '../models';
 import { useScriptManagerStore } from '../stores';
 import { parseOmzHistoryLine } from '../utils';
+import AnimatedComponent from './AnimatedComponent';
 import HistoryCommandListItem from './HistoryCommandListItem';
 import LoadableContainer from './LoadableContainer';
 
@@ -62,6 +63,39 @@ const HistoryScriptsTab = () => {
     );
   }, [historyRecords, selectedHistoryDirectory]);
 
+  const fetchHistoryDirItems = async (historyDirs: string[]) => {
+    const _historyRecords: Record<string, HistoryCommandItem[]> = {};
+    for (const historyDir of historyDirs) {
+      const filePath = `${homeDirectoryPath}/${historyDir}`;
+      const items = await handleExecuteCommand(`cat ${filePath}`);
+      for (const item of items.split('\n')) {
+        if (historyDir === '.zsh_history') {
+          const parsedLine = parseOmzHistoryLine(item);
+          if (!parsedLine) continue;
+          const { command, timestamp } = parsedLine;
+          _historyRecords[historyDir] = _historyRecords[historyDir]
+            ? _historyRecords[historyDir].concat({
+                index: _historyRecords[historyDir].length + 1,
+                name: command,
+                root: historyDir,
+                timestamp: timestamp,
+              })
+            : [];
+        } else {
+          _historyRecords[historyDir] = _historyRecords[historyDir]
+            ? _historyRecords[historyDir].concat({
+                index: _historyRecords[historyDir].length + 1,
+                name: item,
+                root: historyDir,
+                timestamp: undefined,
+              })
+            : [];
+        }
+      }
+    }
+    return _historyRecords;
+  };
+
   useEffect(() => {
     const init = async () => {
       try {
@@ -73,36 +107,7 @@ const HistoryScriptsTab = () => {
             historyDirs.push(item);
           }
         }
-
-        const _historyRecords: Record<string, HistoryCommandItem[]> = {};
-        for (const historyDir of historyDirs) {
-          const filePath = `${homeDirectoryPath}/${historyDir}`;
-          const items = await handleExecuteCommand(`cat ${filePath}`);
-          for (const item of items.split('\n')) {
-            if (historyDir === '.zsh_history') {
-              const parsedLine = parseOmzHistoryLine(item);
-              if (!parsedLine) continue;
-              const { command, timestamp } = parsedLine;
-              _historyRecords[historyDir] = _historyRecords[historyDir]
-                ? _historyRecords[historyDir].concat({
-                    index: _historyRecords[historyDir].length + 1,
-                    name: command,
-                    root: historyDir,
-                    timestamp: timestamp,
-                  })
-                : [];
-            } else {
-              _historyRecords[historyDir] = _historyRecords[historyDir]
-                ? _historyRecords[historyDir].concat({
-                    index: _historyRecords[historyDir].length + 1,
-                    name: item,
-                    root: historyDir,
-                    timestamp: undefined,
-                  })
-                : [];
-            }
-          }
-        }
+        const _historyRecords = await fetchHistoryDirItems(historyDirs);
         setHistoryRecords(_historyRecords);
         setLoading(false);
       } catch (error) {
@@ -148,10 +153,12 @@ const HistoryScriptsTab = () => {
                 </Row>
               </div>
               {currentHistoryRecords.map(item => (
-                <HistoryCommandListItem
-                  item={item}
-                  onClick={() => handleOpenTerminalAndExecuteCommand(item.name)}
-                />
+                <AnimatedComponent.OpacityFadeInDiv delay={200}>
+                  <HistoryCommandListItem
+                    item={item}
+                    onClick={() => handleOpenTerminalAndExecuteCommand(item.name)}
+                  />
+                </AnimatedComponent.OpacityFadeInDiv>
               ))}
             </React.Fragment>
           ) : (
