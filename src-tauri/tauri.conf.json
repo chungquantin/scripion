@@ -36,7 +36,7 @@
     },
     "windows": [
       {
-        "contentProtected": true,
+        "contentProtected": false,
         "fullscreen": false,
         "resizable": true,
         "title": "Scripion made by @nomadiz ❤️",
