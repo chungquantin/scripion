@@ -19,6 +19,8 @@ With Scripion, you can effortlessly organize and execute a wide range of command
 ### Javascript, NodeJS
 
 ## View script history of multiple shells
+<img width="1216" alt="Screenshot 2023-09-18 at 17 06 05" src="https://github.com/nomadiz/scripion/assets/56880684/d41357d1-9d14-410f-8a5d-e5da7caa120b">
+
 
 Scripion streamlines script history management by offering a unified view of scripts executed across various shells. This feature simplifies record-keeping, ensuring that you can efficiently trace your scripting activities.
 
