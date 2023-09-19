@@ -8,6 +8,9 @@ Scripion is a versatile tool designed to streamline command management on your d
 
 With Scripion, you can effortlessly organize and execute a wide range of commands without the need for constant terminal interaction. This user-friendly application simplifies the process of handling basic scripts, allowing you to focus your valuable terminal resources on more critical tasks.
 
+# Installation
+MacOS: [Scrripion Beta v0.0.1](https://github.com/nomadiz/scripion/releases/download/beta-v0.0.1/Scripion_beta_0.0.1_aarch64.dmg)
+
 # Features
 ## Store commands in your workspace
 ![Group 98](https://github.com/nomadiz/scripion/assets/56880684/13835986-a107-4935-a04e-1e7326874e50)
