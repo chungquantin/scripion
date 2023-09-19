@@ -1,8 +1,7 @@
-# Sripion 🦂 - Lightweight desktop script manager
+# <img width="35" alt="Group 97" src="https://github.com/nomadiz/scripion/assets/56880684/c097d4fe-386a-4c33-a280-e92f7308c852"> Sripion - Lightweight desktop script manager for MacOS
 
-<p align="center">
-<img width="300" alt="Group 97" src="https://github.com/nomadiz/scripion/assets/56880684/c097d4fe-386a-4c33-a280-e92f7308c852">
-</p>
+![Group 102](https://github.com/nomadiz/scripion/assets/56880684/89ca0b74-ac85-4d89-b6b0-43310babb9db)
+
 
 Scripion is a versatile tool designed to streamline command management on your device. For developers and engineers who often find themselves navigating the intricacies of the shell and terminal, Scripion is a trusted companion. While these command-line interfaces are invaluable for complex tasks, not all commands require their full attention.
 
