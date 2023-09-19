@@ -20,8 +20,26 @@ Scripion automatically reads package.json from the imported workspaces and store
 ![Group 100](https://github.com/nomadiz/scripion/assets/56880684/05d4d7e1-28cd-4e43-bff0-3b6c7e18aef8)
 
 ## View script history of multiple shells
-![Group 99](https://github.com/nomadiz/scripion/assets/56880684/ab16c06c-7ad3-4ec3-a439-06fdf97e4ff0)
+![Group 101](https://github.com/nomadiz/scripion/assets/56880684/341af1f2-a51c-4d1f-a305-1b38c8cf03ef)
 
 Scripion streamlines script history management by offering a unified view of scripts executed across various shells. This feature simplifies record-keeping, ensuring that you can efficiently trace your scripting activities.
 
 **📝 Scripion does not store your data**, it is designed to utilize the `history` command of the shell feature.
+
+# Development
+Scripion is built using Tauri + Rust for backend and React + Typescript for frontend.
+## Getting started
+Start building Scripion on local
+```
+cargo tauri dev
+```
+Build MacOS bundle
+```
+npm run tauri build
+```
+Format code
+```
+npm run prettier:fix
+```
+---------------------------
+Scripion is developed and maintained under @nomadiz team wit love ❤️
