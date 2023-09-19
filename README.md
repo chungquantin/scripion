@@ -2,7 +2,6 @@
 
 ![Group 102](https://github.com/nomadiz/scripion/assets/56880684/89ca0b74-ac85-4d89-b6b0-43310babb9db)
 
-
 Scripion is a versatile tool designed to streamline command management on your device. For developers and engineers who often find themselves navigating the intricacies of the shell and terminal, Scripion is a trusted companion. While these command-line interfaces are invaluable for complex tasks, not all commands require their full attention.
 
 With Scripion, you can effortlessly organize and execute a wide range of commands without the need for constant terminal interaction. This user-friendly application simplifies the process of handling basic scripts, allowing you to focus your valuable terminal resources on more critical tasks.
