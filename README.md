@@ -12,13 +12,12 @@ With Scripion, you can effortlessly organize and execute a wide range of command
 ## Store commands in your workspace
 ![Group 98](https://github.com/nomadiz/scripion/assets/56880684/13835986-a107-4935-a04e-1e7326874e50)
 
-
-Scripion allows you to store, update workspace name, and remove workspaces easily. Regarding privacy concerns, workspaces are stored locally on your device using SQLite3. 
+Scripion allows you to store, update workspace names, and remove workspaces easily. Regarding privacy concerns, workspaces are stored locally on your device using SQLite3. 
 ### Integrate with different framework projects
 Support: `package.json` projects
 Scripion automatically reads package.json from the imported workspaces and stores them as Scripion's workspace scripts with interactive UI. To import the workspace, click on the **+ Add workspace** button. If the workspace is not a valid project, it won't be imported to Scripion.
 ## Execute command with one click
-
+![Group 100](https://github.com/nomadiz/scripion/assets/56880684/05d4d7e1-28cd-4e43-bff0-3b6c7e18aef8)
 
 ## View script history of multiple shells
 ![Group 99](https://github.com/nomadiz/scripion/assets/56880684/ab16c06c-7ad3-4ec3-a439-06fdf97e4ff0)
