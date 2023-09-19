@@ -34,8 +34,13 @@ function App() {
     setShellDirectoryPath,
     setWorkspaces,
   } = useScriptManagerStore();
-  const { handleExecuteCommand, handleGetShellPath, handleOpenFolder, handleGetAllWorkspaces } =
-    useBackendInvoker();
+  const {
+    handleInitializeDatabase,
+    handleExecuteCommand,
+    handleGetShellPath,
+    handleOpenFolder,
+    handleGetAllWorkspaces,
+  } = useBackendInvoker();
   const [selectedTab, setSelectedTab] = useState<TabItem>(TabItem.Workspace);
 
   useEffect(() => {
@@ -50,6 +55,7 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
+      await handleInitializeDatabase();
       const workspaceList = await handleGetAllWorkspaces();
       const workspaces: Record<string, Workspace> = {};
       for (const workspaceListItem of workspaceList) {
@@ -82,10 +88,6 @@ function App() {
                   {
                     key: TabItem.History,
                     name: 'History',
-                  },
-                  {
-                    key: TabItem.System,
-                    name: 'System',
                   },
                 ].map(tab => (
                   <Col

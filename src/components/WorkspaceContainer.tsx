@@ -1,7 +1,13 @@
 /* eslint-disable no-useless-escape */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { DeleteOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SaveOutlined,
+  SearchOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 import { Button, Divider, Input, Space } from 'antd';
 import Fuse from 'fuse.js';
 
@@ -16,10 +22,16 @@ import ScriptItemList from './ScriptItemList';
 const options = { keys: ['name'] };
 
 const WorkspaceContainer = () => {
-  const { handleImportWorkspace } = useWorkspaceAction();
-  const { handleOpenTerminalAndExecuteCommand } = useBackendInvoker();
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [workspaceCurrentName, setWorkspaceCurrentName] = useState<string>();
+  const { handleImportWorkspace, handleFetchWorkspaces } = useWorkspaceAction();
+  const {
+    handleOpenTerminalAndExecuteCommand,
+    handleDeleteWorkspaceById,
+    handleUpdateNameofWorkspace,
+  } = useBackendInvoker();
   const [searchInput, setSearchInput] = useState<string>('');
-  const { workspaces, selectedWorkspace, removeWorkspace } = useScriptManagerStore();
+  const { workspaces, selectedWorkspace } = useScriptManagerStore();
 
   const selectedWorkspaceScripts = useMemo(() => {
     return (workspaces[selectedWorkspace || '']?.scripts || []).sort((scriptA, scriptB) =>
@@ -50,9 +62,30 @@ const WorkspaceContainer = () => {
     );
   };
 
-  const handleDeleteWorkspace = () => {
-    removeWorkspace(selectedWorkspace || '');
+  const handleToggleEditMode = async () => {
+    setEditMode(!editMode);
   };
+
+  const handleDeleteWorkspace = async () => {
+    if (!selectedWorkspace) return;
+    await handleDeleteWorkspaceById(selectedWorkspace);
+    await handleFetchWorkspaces();
+  };
+
+  const handleSave = async () => {
+    if (!selectedWorkspace) return;
+    await handleUpdateNameofWorkspace(
+      selectedWorkspace,
+      workspaceCurrentName || workspaces[selectedWorkspace].name
+    );
+    await handleFetchWorkspaces();
+    handleToggleEditMode();
+  };
+
+  useEffect(() => {
+    if (!selectedWorkspace) return;
+    setWorkspaceCurrentName(workspaces[selectedWorkspace]?.name);
+  }, [selectedWorkspace, workspaces]);
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -69,9 +102,20 @@ const WorkspaceContainer = () => {
               zIndex: 100,
             }}>
             <div style={{ padding: '7px 20px', ...MIDDLE_STYLE, justifyContent: 'space-between' }}>
-              <div>
-                <h4>{workspaces[selectedWorkspace || '']?.name}</h4>
-              </div>
+              {editMode ? (
+                <div style={{ ...MIDDLE_STYLE }}>
+                  <Input
+                    value={workspaceCurrentName}
+                    onChange={e => setWorkspaceCurrentName(e.target.value)}
+                  />
+                  <SaveOutlined onClick={handleSave} />
+                </div>
+              ) : (
+                <div style={{ ...MIDDLE_STYLE }}>
+                  <h4>{workspaces[selectedWorkspace || '']?.name}</h4>{' '}
+                  <EditOutlined onClick={handleToggleEditMode} style={{ marginLeft: 10 }} />
+                </div>
+              )}
               <Space>
                 <DeleteOutlined onClick={handleDeleteWorkspace} />
               </Space>
@@ -108,7 +152,7 @@ const WorkspaceContainer = () => {
                 }}>
                 <UploadOutlined style={{ marginRight: 10 }} /> Add workspace
               </Button>
-              <p>Support package.json</p>
+              <p>Support Javascript projects (package.json)</p>
             </Space>
           </div>
         </React.Fragment>

@@ -44,7 +44,7 @@
         "minHeight": 500,
         "maxHeight": 2000,
         "visible": false,
-        "hiddenTitle": false,
+        "hiddenTitle": true,
         "decorations": true,
         "focus": true,
         "transparent": true

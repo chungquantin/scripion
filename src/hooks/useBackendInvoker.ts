@@ -2,10 +2,18 @@
 import { useCallback } from 'react';
 
 import { invoke } from '@tauri-apps/api';
+import Database from 'tauri-plugin-sql-api';
 
 import { ScriptItem } from '../models';
 import { Workspace } from '../stores';
 import { formatCommandOutput, iterateObject } from '../utils';
+
+const databasePath = 'sqlite:scripion.db';
+
+const getDatabase = async () => {
+  const db = await Database.load(databasePath);
+  return db;
+};
 
 export const useBackendInvoker = () => {
   const handleInvoke = async <T>(command: string, args?: any) => {
@@ -36,7 +44,8 @@ export const useBackendInvoker = () => {
   }, []);
 
   const handleAddWorkspace = async (name: string, path: string) => {
-    return handleInvoke('add_workspace', { name, path });
+    const db = await getDatabase();
+    return db.execute(`INSERT INTO Workspaces (name, path) VALUES (?1, ?2);`, [name, path]);
   };
 
   const handleFindWorkspaceScripts = async (path: string) => {
@@ -55,9 +64,15 @@ export const useBackendInvoker = () => {
     return scriptItems;
   };
 
+  const handleDeleteWorkspaceById = async (id: string) => {
+    const db = await getDatabase();
+    await db.execute(`DELETE FROM Workspaces WHERE id=${id}`);
+  };
+
   const handleGetAllWorkspaces = async () => {
+    const db = await getDatabase();
     const workspaces: Workspace[] = [];
-    const data: Omit<Workspace, 'scripts'>[] = await handleInvoke('get_all_workspaces');
+    const data: Omit<Workspace, 'scripts'>[] = await db.select('SELECT * FROM Workspaces');
     for (const workspace of data) {
       const scripts = await handleFindWorkspaceScripts(workspace.path);
       workspaces.push({
@@ -70,6 +85,23 @@ export const useBackendInvoker = () => {
     return workspaces;
   };
 
+  const handleUpdateNameofWorkspace = async (id: string, name: string) => {
+    const db = await getDatabase();
+    console.log(id, name);
+    await db.execute(`UPDATE Workspaces SET name='${name}' WHERE id=${id}`);
+  };
+
+  const handleInitializeDatabase = async () => {
+    const db = await Database.load('sqlite:scripion.db');
+    db.execute(`
+      CREATE TABLE IF NOT EXISTS Workspaces (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        path TEXT NOT NULL
+      );
+    `);
+  };
+
   return {
     handleInvoke,
     handleGetShellPath,
@@ -79,5 +111,8 @@ export const useBackendInvoker = () => {
     handleAddWorkspace,
     handleFindWorkspaceScripts,
     handleGetAllWorkspaces,
+    handleInitializeDatabase,
+    handleDeleteWorkspaceById,
+    handleUpdateNameofWorkspace,
   };
 };

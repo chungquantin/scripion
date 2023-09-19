@@ -3,14 +3,8 @@
 
 extern crate base64;
 
-use relative_path::RelativePath;
-use rusqlite::{Connection, Result};
-
 use base64::{engine::general_purpose, Engine};
 use serde::Serialize;
-use std::env::current_dir;
-use std::fs::read_to_string;
-use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use tauri::{Manager, Window};
 
@@ -18,8 +12,6 @@ use tauri::{Manager, Window};
 fn get_shell_path() -> String {
     "/bin/sh".to_string()
 }
-
-const DATABASE_PATH: &str = "../scripion.db";
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -53,80 +45,9 @@ fn execute_command(command: &str) -> Result<String, String> {
     }
 }
 
-fn get_relative_path(path: &str) -> PathBuf {
-    let relative_path = RelativePath::new(path);
-    let full_path = relative_path.to_path(current_dir().unwrap());
-    full_path
-}
-
-fn get_database_conn() -> Connection {
-    let conn = Connection::open(DATABASE_PATH).unwrap();
-    return conn;
-}
-
-#[tauri::command]
-fn get_all_workspaces() -> Vec<Workspace> {
-    let database_path = get_relative_path("sql/select-all-workspaces.sql");
-    let mut workspaces: Vec<Workspace> = vec![];
-    match read_to_string(database_path) {
-        Ok(content) => {
-            let conn = get_database_conn();
-            let stmt_check = conn.prepare(&content);
-            match stmt_check {
-                Ok(mut stmt) => {
-                    let rows = stmt
-                        .query_map((), |row| {
-                            Ok(Workspace {
-                                id: row.get(0)?,
-                                name: row.get(1)?,
-                                path: row.get(2)?,
-                            })
-                        })
-                        .unwrap();
-                    for row in rows {
-                        workspaces.push(row.unwrap())
-                    }
-                }
-                Err(err) => println!("{:?}", err),
-            }
-        }
-        Err(_) => {
-            println!("Failed to initialize database");
-        }
-    };
-    workspaces
-}
-
-#[tauri::command]
-fn add_workspace(name: &str, path: &str) -> Result<String, String> {
-    let database_path = get_relative_path("sql/add-workspace.sql");
-    match read_to_string(database_path) {
-        Ok(content) => {
-            get_database_conn()
-                .execute(&content, &[name, path])
-                .unwrap();
-        }
-        Err(_) => println!("Failed to initialize database"),
-    }
-
-    Ok("Successfully add workspace".to_string())
-}
-
-fn initialize_database() {
-    let conn = get_database_conn();
-    let database_path = get_relative_path("sql/create-workspace-table.sql");
-    print!("Database path {:?}", database_path);
-    match read_to_string(database_path) {
-        Ok(content) => {
-            conn.execute(&content, ()).unwrap();
-        }
-        Err(_) => println!("Failed to initialize database"),
-    }
-}
-
 fn main() {
-    initialize_database();
     tauri::Builder::default()
+        .plugin(tauri_plugin_sql::Builder::default().build())
         .setup(|app| {
             let _window: Window = app.get_window("main").unwrap();
             // Prevent initial shaking
@@ -147,12 +68,7 @@ fn main() {
             }
             _ => {}
         })
-        .invoke_handler(tauri::generate_handler![
-            execute_command,
-            get_shell_path,
-            add_workspace,
-            get_all_workspaces
-        ])
+        .invoke_handler(tauri::generate_handler![execute_command, get_shell_path])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -3,14 +3,27 @@ import { appConfigDir } from '@tauri-apps/api/path';
 
 import { useBackendInvoker } from '.';
 import { ScriptItem } from '../models';
-import { useScriptManagerStore, useSnackbarStore } from '../stores';
+import { Workspace, useScriptManagerStore, useSnackbarStore } from '../stores';
 import { makeid } from '../utils';
 
 export const useWorkspaceAction = () => {
   const { enqueueNotification } = useSnackbarStore();
-  const { handleExecuteCommand, handleAddWorkspace, handleFindWorkspaceScripts } =
-    useBackendInvoker();
-  const { addWorkspace, selectWorkspace } = useScriptManagerStore();
+  const {
+    handleExecuteCommand,
+    handleAddWorkspace,
+    handleFindWorkspaceScripts,
+    handleGetAllWorkspaces,
+  } = useBackendInvoker();
+  const { addWorkspace, selectWorkspace, setWorkspaces } = useScriptManagerStore();
+
+  const handleFetchWorkspaces = async () => {
+    const workspaceList = await handleGetAllWorkspaces();
+    const workspaces: Record<string, Workspace> = {};
+    for (const workspaceListItem of workspaceList) {
+      workspaces[workspaceListItem.id.toString()] = workspaceListItem;
+    }
+    setWorkspaces(workspaces);
+  };
 
   const handleImportWorkspace = async () => {
     try {
@@ -46,5 +59,6 @@ export const useWorkspaceAction = () => {
   return {
     handleImportWorkspace,
     handleFindWorkspaceScripts,
+    handleFetchWorkspaces,
   };
 };

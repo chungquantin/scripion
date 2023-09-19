@@ -12,6 +12,7 @@ edition = "2021"
 [build-dependencies]
 tauri-build = { version = "1.4", features = [] }
 
+
 [dependencies]
 tauri = { version = "1.4", features = [
  "path-all",
@@ -25,8 +26,12 @@ serde_json = "1.0"
 chrono = "0.4.31"
 regex = "1.9.5"
 base64 = "0.21.4"
-rusqlite = "0.29.0"
 relative-path = "1.9.0"
+
+[dependencies.tauri-plugin-sql]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v1"
+features = ["sqlite"]                                   # or "postgres", or "mysql"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
